@@ -46,10 +46,13 @@ app.get('/api/persons', (req, res) => {
 })
 
 
+
 app.get('/info', (req, res) => {
-    
-      res.send('Phonebook has info for '+notes.length+' people.')
+  
+  
+      res.send('Phonebook has info for '+notes.length+' people.'+'<p>'+new Date() +'</p>') //Source https://stackoverflow.com/questions/46931656/how-to-send-date-when-submitting-a-form-with-node-js-and-express
 })
+
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
