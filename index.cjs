@@ -36,7 +36,7 @@ const cors = require('cors')
 
 
 const app = express()
-
+ app.use(express.static('dist'))
 app.use(cors())
 
 app.get('/', (req, res) => {
@@ -63,7 +63,7 @@ app.get('/api/persons/:id', (request, response) => {
   
   
   app.use(express.json())
-  app.use(express.static('dist'))
+ 
 
   app.use(morgan('tiny'));  //https://www.digitalocean.com/community/tutorials/nodejs-getting-started-morgan
 
