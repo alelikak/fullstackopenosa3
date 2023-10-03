@@ -32,10 +32,12 @@ let notes = [
 
 const express = require('express')
 const morgan = require('morgan');
+const cors = require('cors')
+
+
 const app = express()
 
-
-app.use(morgan('tiny'));  //https://www.digitalocean.com/community/tutorials/nodejs-getting-started-morgan
+app.use(cors())
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
@@ -46,13 +48,11 @@ app.get('/api/persons', (req, res) => {
 })
 
 
-
 app.get('/info', (req, res) => {
   
   
       res.send('Phonebook has info for '+notes.length+' people.'+'<p>'+new Date() +'</p>') //Source https://stackoverflow.com/questions/46931656/how-to-send-date-when-submitting-a-form-with-node-js-and-express
 })
-
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
@@ -65,13 +65,24 @@ app.get('/api/persons/:id', (request, response) => {
   app.use(express.json())
   
 
+  app.use(morgan('tiny'));  //https://www.digitalocean.com/community/tutorials/nodejs-getting-started-morgan
 
+  const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next()
+  }
+  app.use(requestLogger)
 
 
  
 
   app.post('/api/persons', (request, response) => {
     const body = request.body
+    console.log('request.body',request.body)
+    
     let names = notes.map(person=>person.name)
     if (!body.name||!body.number) {
       return response.status(400).json({ 
@@ -88,7 +99,9 @@ app.get('/api/persons/:id', (request, response) => {
     let note = {
       name: body.name,
       number: body.number,
-      id: Math.random()
+      id: body.id
+      //id:  Math.floor(Math.random() * 100) + 1 //https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+      
     }
   
     notes = notes.concat(note)
@@ -106,7 +119,13 @@ app.get('/api/persons/:id', (request, response) => {
   })
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
