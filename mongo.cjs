@@ -13,10 +13,10 @@ const password = process.argv[2]
 
 
 const url =
-  `mongodb+srv://tonilelikakis85:${password}@cluster0.36ojk2i.mongodb.net/Phonebook?retryWrites=true&w=majority`  // Source https://stackoverflow.com/questions/55695565/error-message-mongoerror-bad-auth-authentication-failed-through-uri-string
+  `mongodb+srv://tonilelikakis85:Koillinen200@cluster0.36ojk2i.mongodb.net/Phonebook?retryWrites=true&w=majority`  // Source https://stackoverflow.com/questions/55695565/error-message-mongoerror-bad-auth-authentication-failed-through-uri-string
   
   
-  mongoose.set('strictQuery', false)
+mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
