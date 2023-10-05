@@ -36,16 +36,25 @@ const cors = require('cors')
 
 
 const app = express()
- app.use(express.static('dist'))
+app.use(express.static('dist'))
+
 app.use(cors())
+app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
+const Person = require('./models/person.cjs')
 
 app.get('/api/persons', (req, res) => {
-  res.json(notes)
+  Person.find({}).then(persons => {
+    res.json(persons)
+  })
+  
 })
+
+
+
 
 
 app.get('/info', (req, res) => {
@@ -53,17 +62,27 @@ app.get('/info', (req, res) => {
   
       res.send('Phonebook has info for '+notes.length+' people.'+'<p>'+new Date() +'</p>') //Source https://stackoverflow.com/questions/46931656/how-to-send-date-when-submitting-a-form-with-node-js-and-express
 })
-
+/* 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const note = notes.find(note => note.id === id)
   
   if (note) {    response.json(note)  } else {    response.status(404).end()  }})
+*/
+  
+
+
+  app.get('/api/persons/:id', (request, response) => {
+    Person.findById(request.params.id).then(person => {
+      response.json(person)
+    })
+  })
+
+
 
   
-  
-  app.use(express.json())
  
+  
 
   app.use(morgan('tiny'));  //https://www.digitalocean.com/community/tutorials/nodejs-getting-started-morgan
 
@@ -78,7 +97,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 
  
-
+/* 
   app.post('/api/persons', (request, response) => {
     const body = request.body
     console.log('request.body',request.body)
@@ -108,6 +127,37 @@ app.get('/api/persons/:id', (request, response) => {
   
     response.json(note)
   })
+*/
+
+  app.post('/api/persons', (request, response) => {
+    const body = request.body
+  
+    if (body.name === undefined) {
+      return response.status(400).json({ error: 'content missing' })
+    }
+  
+    const person = new Person({
+      name: body.name,
+      number: body.number,
+      id: body.id,
+
+    })
+  
+    person.save().then(savedNote => {
+      response.json(savedNote)
+    })
+  })
+
+
+app.get('/api/person/:id', (request, response) => {
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
+})
+
+
+
+
 
   
 
@@ -119,7 +169,8 @@ app.get('/api/persons/:id', (request, response) => {
   })
 
 
-const PORT = process.env.PORT || 3001
+//const PORT = process.env.PORT || 3001
+const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
