@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
 
-const url = 'mongodb+srv://tonilelikakis85:Koillinen200@cluster0.36ojk2i.mongodb.net/Phonebook?retryWrites=true&w=majority'
+const url = 'mongodb+srv://tonilelikakis85:<password>@cluster0.36ojk2i.mongodb.net/Phonebook?retryWrites=true&w=majority'
 //process.env.MONGODB_UR
 console.log('connecting to', url)
 mongoose.connect(url)
