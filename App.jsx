@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import noteService from './notes'
+import personService from './notes'
 
 const Notification = ({ message }) => {
   if (message === null) {
@@ -82,7 +82,7 @@ const App = () => {
 
      if (window.confirm(`Delete ${event.target.name} ?`)) {
 
-      noteService.poista(event.target.id).then(response => {setAlertMessage( `Deleted '${event.target.name}' `)       
+      personService.poista(event.target.id).then(response => {setAlertMessage( `Deleted '${event.target.name}' `)       
       setTimeout(() => {setAlertMessage(null)}, 5000)}).catch(alert => {})
       console.log('deletePerson eventtia kutsuttiin')
     }
@@ -128,7 +128,7 @@ const App = () => {
     }
     console.log(newObject)
 
-    noteService
+    personService
        .update(note.id, newObject).then(returnedNote => {
          setPersons(persons.map(person => person.id !== id ? person : returnedNote))
          console.log('Update alert toimii 1')
@@ -157,7 +157,12 @@ const App = () => {
     console.log('Create new name',personObject,'persons.length ', persons.length)
     setPersons(persons.concat(personObject))
 
-    noteService.create(personObject).then(response => {setAlertMessage( `Added '${newNote}' `);  setTimeout(() => {setAlertMessage(null)}, 5000)  })
+    personService.create(personObject).then(response => {setAlertMessage( `Added '${newNote}' `);  setTimeout(() => {setAlertMessage(null)}, 5000)  }).catch(error => {
+       console.log(error.response.data)
+       setErrorMessage(error.response.data ) 
+              
+       setTimeout(() => {setErrorMessage(null)}, 5000)
+    })
     setNewNote('')
     setNewNumber('')
   }
@@ -174,8 +179,8 @@ const App = () => {
   }
 
   //https://fullstackopen.com/osa2/palvelimella_olevan_datan_hakeminen
-  useEffect(() => {    console.log('effect')    
-  noteService.getAll().then(response => {setPersons(response.data)})
+  useEffect(() => {      console.log('effect')    
+  personService.getAll().then(response => {setPersons(response.data)})
 
    }, [persons])  
   //Kun ylla olevaan taulukkoon laittaa muuttujan persons, niin renderointi sivuilla tapahtuu reaaliaikaisesti, muutem vain lisaamisen on reaaliaikaista, poistamisessa ja paivittamisessa pitaa painaa selaimen paivitysnappia
