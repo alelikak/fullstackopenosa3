@@ -49,6 +49,7 @@ const Person = require('./models/person.cjs')
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons)
+    notes=persons
   })
   
 })
@@ -129,9 +130,10 @@ app.get('/api/persons/:id', (request, response) => {
   })
 */
 
-  app.post('/api/persons', (request, response) => {
+
+  app.post('/api/persons', (request, response,next) => {
     const body = request.body
-  
+    
     if (body.name === undefined) {
       return response.status(400).json({ error: 'content missing' })
     }
@@ -145,27 +147,74 @@ app.get('/api/persons/:id', (request, response) => {
   
     person.save().then(savedNote => {
       response.json(savedNote)
-    })
+    }).catch(error => next(error))
   })
 
+  const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+  
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+    }
+    else if (error.name === 'ValidationError') 
+    {    
+      return response.status(400).json({ error: error.message })  
+    }
+  
+    next(error)
+  }
+  app.use(errorHandler)
 
-app.get('/api/person/:id', (request, response) => {
+  const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
+  
+  app.use(unknownEndpoint)
+
+app.get('/api/person/:id', (request, response,next) => {
   Person.findById(request.params.id).then(person => {
-    response.json(person)
-  })
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  }).catch(error => next(error))
 })
 
 
 
 
 
-  
+
+
+
+  /* 
 
   app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     notes = notes.filter(note => note.id !== id)
   
     response.status(204).end()
+  })
+*/
+  app.delete('/api/persons/:id', (request, response,next) => {
+    Person.findByIdAndRemove(request.params.id)
+      .then(result => {
+        response.status(204).end()
+      })
+      
+  })
+
+  app.put('/api/persons/:id', (request, response,next) => {
+    
+    const { name,number, id } = request.body
+    
+  
+    Person.findByIdAndUpdate(request.params.id,    { name,number,id },    { new: true, runValidators: true, context: 'query' })
+      .then(updatedPerson => {
+        response.json(updatedPerson)
+      })
+      
   })
 
 
@@ -175,8 +224,4 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
 
-app.use(unknownEndpoint)
