@@ -12,7 +12,7 @@ let notes = []
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-require('dotenv').config()
+//require('dotenv').config()
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
