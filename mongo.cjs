@@ -8,10 +8,9 @@ if (process.argv.length<3) {
 }
 //const password = process.argv[2]
 
+//const url = process.env.MONGODB_URI
 
-
-const url = process.env.MONGODB_URI
-// 'mongodb+srv://tonilelikakis85:Koillinen200@cluster0.36ojk2i.mongodb.net/Phonebook?retryWrites=true&w=majority'  // Source https://stackoverflow.com/questions/55695565/error-message-mongoerror-bad-auth-authentication-failed-through-uri-string
+const url =  'mongodb+srv://tonilelikakis85:Koillinen200@cluster0.36ojk2i.mongodb.net/Phonebook?retryWrites=true&w=majority'  // Source https://stackoverflow.com/questions/55695565/error-message-mongoerror-bad-auth-authentication-failed-through-uri-string
 
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
