@@ -52,7 +52,7 @@ const PersonForm = (props) => {
 }
 
 const Persons = ({deletePerson,personsToShow}) => {
-  const baseUrl = 'http://localhost:3001/api/persons'
+ 
   return (
 
 
