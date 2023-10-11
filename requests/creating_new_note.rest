@@ -1,8 +1,8 @@
-POST http://localhost:3001/api/persons/
+POST https://render-test-y9v7.onrender.com/api/persons/
 content-type: application/json
 
 {
-    "name": "Toni Lelikakis",
-    "number": "04030303030"
+    "name": "Antonios Lelikakis Panatha",
+    "number": "040-303030302"
    
 }
