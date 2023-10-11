@@ -2,7 +2,7 @@ import axios from 'axios'
 const baseUrl = 'https://render-test-y9v7.onrender.com/api/persons'
 
 const getAll = () => {
-  return axios.get(baseUrl)
+  return axios.get('')
 }
 
 const create = newObject => {
