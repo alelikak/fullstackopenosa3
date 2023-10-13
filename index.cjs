@@ -54,7 +54,7 @@ app.use(morgan('tiny'))  //https://www.digitalocean.com/community/tutorials/node
 
 const Person = require('./models/person.cjs')
 
-app.get('/api/persons', (req, res) => {
+app.get('render-test-y9v7.onrender.com/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons)
     notes=persons
@@ -63,7 +63,7 @@ app.get('/api/persons', (req, res) => {
 })
 
 
-app.post('/api/persons', (request, response,next) => {
+app.post('render-test-y9v7.onrender.com/api/persons', (request, response,next) => {
   const body = request.body
 
   if (body.name === undefined) {
@@ -83,7 +83,7 @@ app.post('/api/persons', (request, response,next) => {
 })
 
 
-app.get('/api/persons/:id', (request, response,next) => {
+app.get('render-test-y9v7.onrender.com/api/persons/:id', (request, response,next) => {
   Person.findById(request.params.id).then(person => {
     if (person) {
       response.json(person)
@@ -93,7 +93,7 @@ app.get('/api/persons/:id', (request, response,next) => {
   }).catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response,next) => {
+app.delete('render-test-y9v7.onrender.com/api/persons/:id', (request, response,next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(result => { console.log(result)
       response.status(204).end()
@@ -104,7 +104,7 @@ app.delete('/api/persons/:id', (request, response,next) => {
 
 
 
-app.put('/api/persons/:id', (request, response,next) => {
+app.put('render-test-y9v7.onrender.com/api/persons/:id', (request, response,next) => {
   const { name,number, id } = request.body
   Person.findByIdAndUpdate(request.params.id,    { name,number,id },    { new: true, runValidators: true, context: 'query' })
     .then(updatedPerson => {
@@ -115,7 +115,7 @@ app.put('/api/persons/:id', (request, response,next) => {
 
 
 
-app.get('/info', (req, res) => {
+app.get('render-test-y9v7.onrender.com/info', (req, res) => {
   res.send('Phonebook has info for '+notes.length+' people.'+'<p>'+new Date() +'</p>') //Source https://stackoverflow.com/questions/46931656/how-to-send-date-when-submitting-a-form-with-node-js-and-express
 })
 
