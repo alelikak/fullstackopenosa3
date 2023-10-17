@@ -50,6 +50,10 @@ app.use(express.static('dist'))
 app.use(requestLogger)
 app.use(morgan('tiny'))  //https://www.digitalocean.com/community/tutorials/nodejs-getting-started-morgan
 
+morgan.token('body', function(req, res) {
+  return req.body
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))  //https://www.atatus.com/blog/a-beginners-guide-to-morgan-npm-logger/
 
 
 const Person = require('./models/person.cjs')
