@@ -52,7 +52,7 @@ const PersonForm = (props) => {
 }
 
 const Persons = ({deletePerson,personsToShow}) => {
- 
+  
   return (
 
 
